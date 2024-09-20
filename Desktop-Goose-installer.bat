@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 :: Set the URL for Desktop Goose
-set "gooseUrl=https://samperson.itch.io/desktop-goose"
+set "gooseUrl=https://github.com/samperson/desktop-goose/releases/download/v0.3/Desktop_Goose_v0.3.zip"
 
 :: Set the installation directory
 set "installDir=%USERPROFILE%\DesktopGoose"
@@ -13,9 +13,10 @@ if not exist "%installDir%" mkdir "%installDir%"
 :: Download Desktop Goose if it's not already installed
 if not exist "%installDir%\GooseDesktop.exe" (
     echo Downloading Desktop Goose...
-    powershell -Command "(New-Object Net.WebClient).DownloadFile('%gooseUrl%', '%installDir%\DesktopGoose.zip')"
+    bitsadmin /transfer DesktopGooseDownload /download /priority normal "%gooseUrl%" "%installDir%\DesktopGoose.zip"
+    
     echo Extracting files...
-    powershell -Command "Expand-Archive -Path '%installDir%\DesktopGoose.zip' -DestinationPath '%installDir%' -Force"
+    tar -xf "%installDir%\DesktopGoose.zip" -C "%installDir%"
     del "%installDir%\DesktopGoose.zip"
 )
 
